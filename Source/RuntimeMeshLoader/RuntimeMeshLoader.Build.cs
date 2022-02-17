@@ -55,20 +55,32 @@ public class RuntimeMeshLoader : ModuleRules
 			}
 			);
 
-			PublicDelayLoadDLLs.Add("assimp-vc142-mt.dll");
 
         if (Target.Platform == UnrealTargetPlatform.Win64)
         {
-            PublicAdditionalLibraries.Add(Path.Combine(thirdPartyPath, "assimp\\lib", "assimp-vc142-mt.lib"));
+	        PublicDelayLoadDLLs.Add("assimp-vc142-mt.dll");
+
+            PublicAdditionalLibraries.Add(Path.Combine(thirdPartyPath, "assimp", "lib", "assimp-vc142-mt.lib"));
         
-            RuntimeDependencies.Add(Path.Combine(thirdPartyPath, "assimp\\bin", "assimp-vc142-mt.dll"));
+            RuntimeDependencies.Add(Path.Combine(thirdPartyPath, "assimp", "lib", "assimp-vc142-mt.dll"));
         }
 		
 		if (Target.Platform == UnrealTargetPlatform.Linux)
 		{
-			var AssimpLib = Path.Combine(ModuleDirectory, "..", "..", "ThirdParty", "assimp", "lib", "libassimp.so");
+			var AssimpLib = Path.Combine(thirdPartyPath, "assimp", "lib", "libassimp.so");
 
 			PublicAdditionalLibraries.Add(AssimpLib);
+
+			RuntimeDependencies.Add(AssimpLib);
+		}
+
+		if (Target.Platform == UnrealTargetPlatform.Mac)
+		{
+			var AssimpLib = Path.Combine(thirdPartyPath, "assimp", "lib", "libassimp.5.dylib");
+
+			PublicDelayLoadDLLs.Add(AssimpLib);
+			
+			// PublicAdditionalLibraries.Add(AssimpLib);	
 
 			RuntimeDependencies.Add(AssimpLib);
 		}
